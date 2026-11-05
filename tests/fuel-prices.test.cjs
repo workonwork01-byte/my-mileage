@@ -1,0 +1,5 @@
+'use strict';
+const {test}=require('node:test');const assert=require('node:assert/strict');
+const {parsePrice,parsePrices}=require('../netlify/functions/fuel-prices.cjs')._test;
+test('price validation',()=>{assert.equal(parsePrice('92,90'),92.9);assert.equal(parsePrice('—'),null);assert.equal(parsePrice(''),null);assert.equal(parsePrice('10000'),null)});
+test('regional prices table parsing',()=>{const html='<table><tr><th>Оператор</th><th>А 95+</th><th>А 95</th><th>А 92</th><th>ДТ</th><th>Газ</th></tr><tr><td>ОККО</td><td>95,90</td><td>92,90</td><td></td><td>106,90</td><td>59,90</td></tr><tr><td>WOG</td><td>95,90</td><td>92,90</td><td></td><td>106,90</td><td>59,90</td></tr><tr><td>UPG</td><td>92,90</td><td>89,90</td><td></td><td>102,90</td><td>58,90</td></tr></table>';const r=parsePrices(html);assert.equal(r.OKKO.A95,92.9);assert.equal(r.OKKO.A92,undefined);assert.equal(r.WOG.LPG,59.9);assert.equal(r.UPG.DIESEL,102.9)});
