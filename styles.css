@@ -6,3 +6,5 @@
 .fuel-auto-options{border-top:1px solid #30475d;margin-top:18px;padding-top:4px}
 .fuel-status,.fuel-hint{margin-top:13px;padding:12px 13px;border-radius:11px;background:#123941;color:#d3eee8;border:1px solid #2d666c;font-size:12px;line-height:1.5}
 .fuel-status.warning,.fuel-hint.warning{border-color:#82694a;color:#f6d9ab;background:#3c302b}
+
+.fuel-source{font-size:.82rem;line-height:1.45;color:#bdc9da;margin:9px 0 4px;overflow-wrap:anywhere}.fuel-source a{color:#76e7c4;text-decoration:underline;text-underline-offset:3px}

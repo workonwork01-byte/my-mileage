@@ -62,6 +62,7 @@
 <label class="field-label" for="fuel-type">Название топлива на выбранной АЗС</label><select id="fuel-type"></select>
 <button type="button" id="refresh-fuel" class="secondary-button wide">↻ Обновить цену сейчас</button>
 <div class="fuel-status" id="fuel-status" role="status">Цена ещё не загружена.</div>
+<div class="fuel-source" id="fuel-source">Источник данных ещё не загружен.</div>
 <p class="hint">Показана средняя цена по сети в Днепропетровской области, а не цена конкретной колонки. Скидки и карты лояльности не учитываются. Данные предоставлены агрегатором, могут запаздывать.</p>
 </div>
 <label class="field-label" for="default-price">Цена за литр, ₴ (всегда можно исправить вручную)</label><input id="default-price" type="number" min="0" max="10000" step="0.01" inputmode="decimal">
@@ -70,7 +71,7 @@
       <div class="form-card"><h2 class="small-title">Резервная копия</h2><p class="muted">Данные находятся только в этом браузере на этом устройстве. При его очистке записи могут пропасть — регулярно сохраняйте копию.</p><div class="settings-buttons"><button id="export-json" class="secondary-button">Скачать копию JSON</button><button id="export-csv" class="secondary-button">Экспорт CSV</button><button id="import-trigger" class="ghost-button">Восстановить из JSON</button></div><input type="file" id="import-file" accept=".json,application/json" hidden></div>
       <div class="form-card"><h2 class="small-title">Установка и работа без сети</h2><p class="muted">Откройте приложение по HTTPS. На Android выберите «Установить приложение» в меню браузера; на iPhone — «Поделиться» → «На экран Домой». После первого открытия журнал доступен без сети. Для распознавания фото интернет необходим.</p><button id="install-btn" class="secondary-button wide hidden">Установить приложение</button></div>
       <div class="form-card danger-zone"><h2 class="small-title">Удаление данных</h2><button class="danger-button" id="clear-data">Удалить все записи</button></div>
-      <div class="footer-version">Мой пробег · Версия 1.1 · Данные без облачной синхронизации</div>
+      <div class="footer-version">Мой пробег · Версия 1.3 · Данные без облачной синхронизации</div>
     </section>
   </main>
   <nav class="bottom-nav" aria-label="Основная навигация"><button class="nav-item active" data-go="dashboard" aria-current="page"><span class="nav-symbol">▦</span><span>Обзор</span></button><button class="nav-item" data-go="entry"><span class="nav-symbol">⊕</span><span>Запись</span></button><button class="nav-item" data-go="history"><span class="nav-symbol">▤</span><span>История</span></button><button class="nav-item" data-go="settings"><span class="nav-symbol">⚙</span><span>Настройки</span></button></nav>
