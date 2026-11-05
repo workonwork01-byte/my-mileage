@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1527">
+  <meta name="description" content="Личный учёт пробега и расходов на топливо. Фото одометра, история и отчёты.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Мой пробег">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Мой пробег — учёт топлива</title>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">↗</div><div><div class="eyebrow">ЛИЧНЫЙ ЖУРНАЛ</div><strong>Мой пробег</strong></div></div>
+    <div class="top-actions"><span class="privacy-dot" aria-hidden="true"></span><span class="private-label">Данные на устройстве</span></div>
+  </header>
+  <main id="page" tabindex="-1">
+    <section class="screen" id="screen-dashboard" aria-labelledby="title-dashboard">
+      <div class="heading"><div><div class="eyebrow">ОБЗОР</div><h1 id="title-dashboard">Ваши поездки</h1><p id="today-label" class="muted"></p></div><span class="heading-deco">◉</span></div>
+      <div class="hero-card"><div class="hero-top"><span>ПРОБЕГ В ЭТОМ МЕСЯЦЕ</span><span class="hero-tag" id="hero-month"></span></div><div class="hero-value"><strong id="month-km">0</strong><span>км</span></div><div class="hero-bottom"><div><small>Топливо</small><strong id="month-liters">0 л</strong></div><div><small>Сумма</small><strong id="month-cost">0 ₴</strong></div></div><div class="hero-glow"></div></div>
+      <div class="metrics-grid"><div class="metric-card"><div class="metric-icon mint">↗</div><div class="metric-caption">Эта неделя</div><strong id="week-km">0 км</strong><small id="week-range"></small></div><div class="metric-card"><div class="metric-icon amber">◈</div><div class="metric-caption">Рабочих дней в месяце</div><strong id="month-days">0</strong><small>С записями</small></div></div>
+      <div class="section-head"><h2>Последние 7 дней</h2><span>Пробег, км</span></div><div class="chart-card"><div id="week-chart" class="bars" role="img" aria-label="Пробег за последние 7 дней"></div></div>
+      <div class="section-head"><h2>Последние записи</h2><button class="text-button" data-go="history">Все записи →</button></div><div id="recent-records" class="records-list"></div>
+      <button class="primary-button wide" data-go="entry"><span class="button-plus">＋</span> Добавить пробег</button>
+    </section>
+    <section class="screen hidden" id="screen-entry" aria-labelledby="title-entry">
+      <div class="heading"><div><div class="eyebrow">НОВАЯ ЗАПИСЬ</div><h1 id="title-entry">Пробег за день</h1><p class="muted">Начало и конец рабочего дня</p></div></div>
+      <form id="entry-form" class="form-card" novalidate>
+        <label class="field-label" for="entry-date">Дата</label><input id="entry-date" name="date" type="date" required>
+        <div id="weekend-warning" class="hint hidden">Это выходной. Запись всё равно можно сохранить.</div>
+        <div class="input-heading"><label class="field-label" for="start-mileage">Одометр утром</label><span>км</span></div>
+        <div class="odo-input-row"><input id="start-mileage" name="start" inputmode="numeric" type="number" min="0" step="1" placeholder="Например, 124500" required><button type="button" class="camera-button" data-scan="start" aria-label="Распознать утренний одометр по фотографии"><span>▣</span><small>Фото</small></button></div>
+        <div class="input-heading"><label class="field-label" for="end-mileage">Одометр вечером</label><span>км</span></div>
+        <div class="odo-input-row"><input id="end-mileage" name="end" inputmode="numeric" type="number" min="0" step="1" placeholder="Например, 124580" required><button type="button" class="camera-button" data-scan="end" aria-label="Распознать вечерний одометр по фотографии"><span>▣</span><small>Фото</small></button></div>
+        <div class="calculation"><div><span>Пробег за день</span><strong id="preview-km">— км</strong></div><div><span>Топливо по норме</span><strong id="preview-liters">— л</strong></div><div class="calculation-total"><span>Стоимость топлива</span><strong id="preview-cost">— ₴</strong></div></div>
+        <div id="entry-fuel-hint" class="fuel-hint" role="status"></div><div class="two-fields"><div><label class="field-label" for="entry-consumption">Расход, л/100 км</label><input id="entry-consumption" type="number" min="0" max="25" step="0.1" inputmode="decimal" required></div><div><label class="field-label" for="entry-price">Цена за литр, ₴</label><input id="entry-price" type="number" min="0" max="10000" step="0.01" inputmode="decimal" required></div></div>
+        <label class="field-label" for="entry-note">Комментарий (необязательно)</label><textarea id="entry-note" rows="2" maxlength="300" placeholder="Например, рабочая поездка"></textarea>
+        <div id="form-error" class="error hidden" role="alert"></div>
+        <button type="submit" class="primary-button wide" id="save-entry">Сохранить запись</button>
+        <button type="button" class="ghost-button wide hidden" id="cancel-edit">Отменить редактирование</button>
+      </form>
+      <p class="help-text">Фотографии используются для распознавания и не сохраняются в журнале. Всегда проверяйте распознанное число.</p>
+    </section>
+    <section class="screen hidden" id="screen-history" aria-labelledby="title-history">
+      <div class="heading"><div><div class="eyebrow">АРХИВ</div><h1 id="title-history">История</h1><p class="muted">Записи и расчёты по дням</p></div></div>
+      <div class="filter-row"><label for="filter-month">Месяц</label><input id="filter-month" type="month"><button type="button" id="show-all" class="subtle-button">Все</button></div>
+      <div id="history-summary" class="history-summary"></div><div id="history-list" class="records-list"></div>
+    </section>
+    <section class="screen hidden" id="screen-settings" aria-labelledby="title-settings">
+      <div class="heading"><div><div class="eyebrow">ПАРАМЕТРЫ</div><h1 id="title-settings">Настройки</h1><p class="muted">Норма расхода и сохранность данных</p></div></div>
+      <div class="form-card"><h2 class="small-title">Топливо и цена</h2>
+<label class="field-label" for="default-consumption">Расход топлива, л/100 км (0–25)</label><input id="default-consumption" type="number" min="0" max="25" step="0.1" inputmode="decimal">
+<label class="field-label" for="price-mode">Как узнавать цену топлива</label><select id="price-mode"><option value="manual">Вводить вручную</option><option value="auto">Автоматически по сети АЗС</option></select>
+<div id="fuel-auto-options" class="fuel-auto-options hidden">
+<label class="field-label" for="fuel-station">Сеть АЗС (Днепропетровская область)</label><select id="fuel-station"></select>
+<label class="field-label" for="fuel-type">Вид топлива</label><select id="fuel-type"></select>
+<button type="button" id="refresh-fuel" class="secondary-button wide">↻ Обновить цену сейчас</button>
+<div class="fuel-status" id="fuel-status" role="status">Цена ещё не загружена.</div>
+<p class="hint">Показана средняя цена по сети в Днепропетровской области, а не цена конкретной колонки. Скидки и карты лояльности не учитываются. Данные предоставлены агрегатором, могут запаздывать.</p>
+</div>
+<label class="field-label" for="default-price">Цена за литр, ₴ (всегда можно исправить вручную)</label><input id="default-price" type="number" min="0" max="10000" step="0.01" inputmode="decimal">
+<button id="save-settings" class="secondary-button wide">Сохранить настройки</button>
+<p class="hint">Новая цена применяется только к новым записям. Старые поездки не пересчитываются. Без интернета можно ввести цену вручную.</p></div>
+      <div class="form-card"><h2 class="small-title">Резервная копия</h2><p class="muted">Данные находятся только в этом браузере на этом устройстве. При его очистке записи могут пропасть — регулярно сохраняйте копию.</p><div class="settings-buttons"><button id="export-json" class="secondary-button">Скачать копию JSON</button><button id="export-csv" class="secondary-button">Экспорт CSV</button><button id="import-trigger" class="ghost-button">Восстановить из JSON</button></div><input type="file" id="import-file" accept=".json,application/json" hidden></div>
+      <div class="form-card"><h2 class="small-title">Установка и работа без сети</h2><p class="muted">Откройте приложение по HTTPS. На Android выберите «Установить приложение» в меню браузера; на iPhone — «Поделиться» → «На экран Домой». После первого открытия журнал доступен без сети. Для распознавания фото интернет необходим.</p><button id="install-btn" class="secondary-button wide hidden">Установить приложение</button></div>
+      <div class="form-card danger-zone"><h2 class="small-title">Удаление данных</h2><button class="danger-button" id="clear-data">Удалить все записи</button></div>
+      <div class="footer-version">Мой пробег · Версия 1.1 · Данные без облачной синхронизации</div>
+    </section>
+  </main>
+  <nav class="bottom-nav" aria-label="Основная навигация"><button class="nav-item active" data-go="dashboard" aria-current="page"><span class="nav-symbol">▦</span><span>Обзор</span></button><button class="nav-item" data-go="entry"><span class="nav-symbol">⊕</span><span>Запись</span></button><button class="nav-item" data-go="history"><span class="nav-symbol">▤</span><span>История</span></button><button class="nav-item" data-go="settings"><span class="nav-symbol">⚙</span><span>Настройки</span></button></nav>
+</div>
+<dialog id="scan-dialog" class="scan-dialog" aria-labelledby="scan-heading"><div class="scan-top"><div><div class="eyebrow">РАСПОЗНАВАНИЕ</div><h2 id="scan-heading">Фото одометра</h2></div><button class="close-button" id="close-scan" type="button" aria-label="Закрыть">×</button></div><p class="muted">Сфотографируйте показания одометра, затем выделите цифры рамкой. Не включайте скорость, запас хода и суточный пробег.</p><input id="camera-input" type="file" accept="image/*" capture="environment"><div id="crop-wrap" class="crop-wrap hidden"><canvas id="crop-canvas" aria-label="Фото для выделения области с одометром"></canvas><p class="hint">Проведите пальцем по фото, чтобы выделить область с показаниями.</p><button id="recognize-btn" class="primary-button wide" type="button">Распознать выделенные цифры</button></div><div id="scan-status" role="status" class="scan-status"></div><div id="scan-result" class="hidden"><label class="field-label" for="recognized-value">Проверьте число, при необходимости исправьте</label><input id="recognized-value" inputmode="numeric" type="number" min="0" step="1"><button type="button" class="primary-button wide" id="apply-scan">Подставить в запись</button></div><p class="hint">Распознавание работает через Tesseract.js; при первой загрузке требуется интернет. Фото не отправляется на сервер приложения, но библиотека загружается из внешнего CDN.</p></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js" defer></script>
+</body></html>
